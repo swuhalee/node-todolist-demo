@@ -7,21 +7,8 @@ require('dotenv').config();
 const app = express();
 const { MONGODB_URI_PROD } = process.env;
 
-var whitelist = [
-    'http://localhost:8080',
-    // 배포 후 실제 도메인 추가
-    // 예: 'https://your-app.elasticbeanstalk.com'
-]
-var corsOptions = {
-    origin: function (origin, callback) {
-        if (!origin || whitelist.indexOf(origin) !== -1) {
-            callback(null, true)
-        } else {
-            callback(new Error('Not allowed by CORS'))
-        }
-    }
-}
-app.use(cors(corsOptions))
+app.use(cors);
+
 app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
