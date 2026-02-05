@@ -7,17 +7,27 @@ require('dotenv').config();
 const app = express();
 const { MONGODB_URI_PROD } = process.env;
 
-var whitelist = ['http://localhost:3000'] 
-var corsOptions = {  
-      origin: function (origin, callback) {
-            if (whitelist.indexOf(origin) !== -1) {      
-                callback(null, true)
-            } else {
-                callback(new Error('Not allowed by CORS'))
-             }
-      } }
+var whitelist = [
+    'http://localhost:8080',
+    // 배포 후 실제 도메인 추가
+    // 예: 'https://your-app.elasticbeanstalk.com'
+]
+var corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin || whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
+    }
+}
 app.use(cors(corsOptions))
 app.use(bodyParser.json());
+
+app.get('/', (req, res) => {
+    res.status(200).send('OK');
+});
+
 app.use('/api', indexRouter);
 
 const mongoURI = MONGODB_URI_PROD;
@@ -27,6 +37,6 @@ mongoose.connect(mongoURI)
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.log('MongoDB connection error:', err));
 
-app.listen(5001, () => {
-    console.log('Server is running on http://localhost:5001');
+app.listen(8080, () => {
+    console.log('Server is running on http://localhost:8080');
 });    
