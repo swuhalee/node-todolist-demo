@@ -42,4 +42,17 @@ userController.loginWithEmail = async (req, res) => {
     }
 }
 
+userController.getUser = async (req, res) => {
+    try {
+        const { userId } = req;
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new Error("Invalid user");
+        }
+        return res.status(200).json({ status: 'ok', user });
+    } catch (error) {
+        return res.status(500).json({ status: 'fail', message: error.message });
+    }
+}
+
 module.exports = userController

@@ -33,7 +33,7 @@ userSchema.methods.generateToken = function() {
     const token = jwt.sign(
         { _id: this._id, email: this.email },
         JWT_SECRET_KEY,
-        { expiresIn: '3h' }
+        { expiresIn: '1d' }
     );
     return token;
 }
